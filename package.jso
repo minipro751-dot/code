@@ -1,0 +1,12 @@
+{
+  "name": "bot-aternos-afk",
+  "version": "1.0.0",
+  "description": "Bot para manter o servidor do Aternos aberto",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "mineflayer": "^4.22.0"
+  }
+}
