@@ -1,0 +1,38 @@
+const mineflayer = require('mineflayer');
+
+function createBot() {
+    const bot = mineflayer.createBot({
+        host: 'SEU_SERVIDO_AQUI.aternos.me', // ⚠️ Troque pelo IP do seu Aternos
+        port: 25565,                         // ⚠️ Troque pela porta se o seu for Bedrock (mas mineflayer roda nativo em Java)
+        username: 'Bot_AFK_24h',             // Nome do boneco no jogo
+        version: false                       // Autodetecta a versão do servidor
+    });
+
+    bot.on('spawn', () => {
+        console.log('Bot entrou com sucesso no servidor!');
+        
+        // Pequena ação para não ficar totalmente estático
+        setInterval(() => {
+            if (bot.entity) {
+                bot.setControlState('jump', true);
+                setTimeout(() => bot.setControlState('jump', false), 500);
+            }
+        }, 60000); // Pula a cada 60 segundos
+    });
+
+    bot.on('end', (reason) => {
+        console.log(`Bot desconectado (${reason}). Tentando reconectar em 30 segundos...`);
+        setTimeout(createBot, 30000); 
+    });
+
+    bot.on('error', (err) => console.log('Erro encontrado:', err));
+}
+
+// Inicia um servidor web falso simples para o Render não derrubar o serviço
+const http = require('http');
+http.createServer((req, res) => {
+    res.write("Bot ativo!");
+    res.end();
+}).listen(process.env.PORT || 3000);
+
+createBot();
